@@ -1,0 +1,80 @@
+[
+  {
+    "upn": "priya.shah@contoso.com",
+    "display_name": "Priya Shah",
+    "job_title": "Cloud Security Architect",
+    "department": "Information Security",
+    "is_privileged": true,
+    "privileged_role": "Global Administrator",
+    "usual_country": "US",
+    "usual_city": "Seattle",
+    "usual_device_os": "Windows 11",
+    "usual_hours_start": 7,
+    "usual_hours_end": 19
+  },
+  {
+    "upn": "mark.olsen@contoso.com",
+    "display_name": "Mark Olsen",
+    "job_title": "Messaging Engineer",
+    "department": "IT Operations",
+    "is_privileged": true,
+    "privileged_role": "Exchange Administrator",
+    "usual_country": "NO",
+    "usual_city": "Oslo",
+    "usual_device_os": "iOS",
+    "usual_hours_start": 8,
+    "usual_hours_end": 18
+  },
+  {
+    "upn": "lena.fischer@contoso.com",
+    "display_name": "Lena Fischer",
+    "job_title": "Finance Director",
+    "department": "Finance",
+    "is_privileged": false,
+    "privileged_role": null,
+    "usual_country": "DE",
+    "usual_city": "Berlin",
+    "usual_device_os": "macOS",
+    "usual_hours_start": 8,
+    "usual_hours_end": 19
+  },
+  {
+    "upn": "david.chen@contoso.com",
+    "display_name": "David Chen",
+    "job_title": "Senior Software Engineer",
+    "department": "Engineering",
+    "is_privileged": false,
+    "privileged_role": null,
+    "usual_country": "US",
+    "usual_city": "San Jose",
+    "usual_device_os": "macOS",
+    "usual_hours_start": 9,
+    "usual_hours_end": 22
+  },
+  {
+    "upn": "sara.ahmed@contoso.com",
+    "display_name": "Sara Ahmed",
+    "job_title": "Account Executive",
+    "department": "Sales",
+    "is_privileged": false,
+    "privileged_role": null,
+    "usual_country": "AE",
+    "usual_city": "Dubai",
+    "usual_device_os": "iOS",
+    "usual_hours_start": 8,
+    "usual_hours_end": 20
+  },
+  {
+    "upn": "svc-reporting@contoso.com",
+    "display_name": "svc-reporting (Service Principal)",
+    "job_title": "Reporting Service",
+    "department": "IT Automation",
+    "is_privileged": false,
+    "privileged_role": null,
+    "usual_country": "US",
+    "usual_city": "Virginia",
+    "usual_device_os": "Linux",
+    "usual_hours_start": 0,
+    "usual_hours_end": 23
+  }
+]
