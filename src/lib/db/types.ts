@@ -52,12 +52,36 @@ export interface InvestigationRow {
   summary: string;
   reasoning: string;
   signals: SignalCitation[];
+  citations: PersistedCitation[];
+  phase_timings: PersistedPhaseTiming[];
+  knowledge_source: "foundry-iq" | "bundled-fallback" | null;
   model: string;
   prompt_tokens: number | null;
   completion_tokens: number | null;
   latency_ms: number | null;
   cached: boolean;
   created_at: string;
+}
+
+export interface PersistedCitation {
+  source_id: string;
+  title: string;
+  publisher: string;
+  url: string;
+  snippet: string;
+  score: number;
+  why?: string;       // populated when the model explicitly cited it
+}
+
+export interface PersistedPhaseTiming {
+  phase:
+    | "heuristic_signals"
+    | "knowledge_retrieval"
+    | "llm_reasoning"
+    | "action_synthesis";
+  started_at: string;
+  duration_ms: number;
+  detail?: string;
 }
 
 export type ActionType =

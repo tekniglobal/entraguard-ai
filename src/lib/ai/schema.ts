@@ -57,6 +57,24 @@ export const investigationSchema = z.object({
     .describe(
       "Ordered list of remediations. Pick zero or more from the fixed enum. Use no_action only for clearly benign sign-ins."
     ),
+  citations_used: z
+    .array(
+      z.object({
+        source_id: z
+          .string()
+          .describe(
+            "Exact source_id of a retrieved knowledge source you grounded the analysis on."
+          ),
+        why: z
+          .string()
+          .describe(
+            "One short clause explaining what this source contributed to the verdict."
+          ),
+      })
+    )
+    .describe(
+      "Subset of the retrieved knowledge sources you actually grounded your reasoning on. Leave empty if no retrieved source was relevant."
+    ),
 });
 
 export type InvestigationOutput = z.infer<typeof investigationSchema>;

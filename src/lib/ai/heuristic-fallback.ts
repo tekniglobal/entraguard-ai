@@ -6,6 +6,7 @@ import {
   verdictFromScore,
 } from "@/lib/risk/heuristics";
 import type { InvestigationOutput } from "@/lib/ai/schema";
+import type { Citation } from "@/lib/foundry/types";
 
 // Deterministic investigation builder. Produces output in the same shape as
 // the AI would, derived purely from the signal weights. Used when Azure OpenAI
@@ -14,7 +15,8 @@ import type { InvestigationOutput } from "@/lib/ai/schema";
 export function heuristicInvestigation(
   signIn: SignInRow,
   user: UserRow,
-  baseline: UserBaseline
+  baseline: UserBaseline,
+  citations: Citation[] = []
 ): InvestigationOutput {
   const signals = computeSignals(signIn, user);
   const score = heuristicScore(signals);
@@ -67,6 +69,15 @@ export function heuristicInvestigation(
     );
   } else {
     reasoningParts.push("Observed deviations: " + observations.join("; ") + ".");
+  }
+
+  if (citations.length > 0) {
+    reasoningParts.push(
+      `Grounded in retrieved guidance: ${citations
+        .slice(0, 3)
+        .map((c) => `*${c.title}* (${c.publisher})`)
+        .join("; ")}.`
+    );
   }
 
   if (verdict === "malicious") {
@@ -182,6 +193,17 @@ export function heuristicInvestigation(
         ? `Anomalous sign-in for ${user.display_name} — review recommended`
         : `Normal sign-in for ${user.display_name}`;
 
+  // In fallback mode, cite the top retrieved sources that match this verdict.
+  const citationsUsed = citations.slice(0, Math.min(3, citations.length)).map(
+    (c) => ({
+      source_id: c.source_id,
+      why:
+        verdict === "benign"
+          ? "Confirms this sign-in pattern is consistent with documented benign behavior."
+          : "Documents the threat pattern observed.",
+    })
+  );
+
   return {
     risk_score: score,
     verdict,
@@ -189,6 +211,7 @@ export function heuristicInvestigation(
     reasoning,
     signals_cited: signalsCited,
     recommended_actions: recommended,
+    citations_used: citationsUsed,
   };
 }
 

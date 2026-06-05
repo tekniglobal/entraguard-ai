@@ -21,6 +21,8 @@ import { RiskGauge } from "@/components/risk-gauge";
 import { RiskBadge } from "@/components/risk-badge";
 import { TeamsAdaptiveCard } from "@/components/teams-adaptive-card";
 import { TypewriterReasoning } from "@/components/typewriter-reasoning";
+import { CitationList } from "@/components/citation-list";
+import { ReasoningTrace } from "@/components/reasoning-trace";
 import { countryFlag, formatDateTime } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -62,6 +64,15 @@ export default async function InvestigationDetail({
                   <Cpu className="h-3 w-3" />
                   {investigation.model}
                 </Badge>
+                {investigation.knowledge_source === "foundry-iq" ? (
+                  <Badge variant="info" className="gap-1">
+                    Foundry IQ · live
+                  </Badge>
+                ) : investigation.knowledge_source === "bundled-fallback" ? (
+                  <Badge variant="warning" className="gap-1">
+                    Foundry IQ · bundled
+                  </Badge>
+                ) : null}
                 {signIn.user.is_privileged ? (
                   <Badge variant="warning" className="gap-1">
                     <ShieldCheck className="h-3 w-3" />
@@ -159,6 +170,18 @@ export default async function InvestigationDetail({
               </div>
             )}
           </div>
+        </div>
+
+        <div className="grid gap-6 lg:grid-cols-[1fr_minmax(360px,420px)]">
+          <Card className="p-6">
+            <CitationList
+              citations={investigation.citations}
+              knowledgeSource={investigation.knowledge_source}
+            />
+          </Card>
+          <Card className="p-6">
+            <ReasoningTrace phases={investigation.phase_timings} />
+          </Card>
         </div>
 
         <Card className="overflow-hidden">

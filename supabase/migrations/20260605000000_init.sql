@@ -69,6 +69,9 @@ create table if not exists public.investigations (
   summary text not null,
   reasoning text not null,
   signals jsonb not null default '[]'::jsonb,
+  citations jsonb not null default '[]'::jsonb,
+  phase_timings jsonb not null default '[]'::jsonb,
+  knowledge_source text,  -- 'foundry-iq' | 'bundled-fallback' | null
   model text not null,
   prompt_tokens int,
   completion_tokens int,
