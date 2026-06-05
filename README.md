@@ -13,6 +13,39 @@ append-only audit log with the cited sources.
 > **Submitted to**: Microsoft Agents League Hackathon 2026 — **🧠 Reasoning Agents** track + **💡 Best Use of IQ Tools**.
 > Live demo: https://entraguard-ai.vercel.app
 
+---
+
+## 👋 For judges — evaluate in 5 minutes
+
+1. **Open the live demo**: https://entraguard-ai.vercel.app/dashboard
+2. **Click "Investigate with EntraGuard AI"** on the priority queue (Priya Shah / Moscow). You'll see the agent run its four-phase pipeline: heuristic signals → Foundry IQ retrieval → LLM reasoning → action synthesis. The reasoning trace panel shows each phase with timings. Citations include real Microsoft Learn, MITRE ATT&CK, and CISA links; the ones the agent grounded its reasoning on are badged "cited by agent" with a why-quote.
+3. **Approve one of the Teams Adaptive Cards** ("Disable account"). The simulated Microsoft Graph remediation runs; check `/audit` to see the chronological story (ingest → knowledge retrieval → investigation → human approval → system execution).
+4. **Do the contrast**: open the Mark Olsen / Stockholm sign-in (`/sign-ins`) and Investigate. Score in the 20s, verdict benign, no aggressive actions — proves the agent isn't a geo rule engine.
+
+**Key code paths to review:**
+- `src/lib/foundry/retrieve.ts` — Foundry IQ client (Azure AI Search agentic-retrieval REST, `api-version=2026-04-01`) with bundled fallback
+- `src/lib/risk/heuristics.ts` — deterministic pre-flight signals
+- `src/lib/ai/{prompts,schema,investigate}.ts` — Azure OpenAI structured reasoning with Zod
+- `src/app/api/investigate/route.ts` — orchestrates the four phases, persists timings + citations
+- `src/components/{citation-list,reasoning-trace,teams-adaptive-card}.tsx` — the UI that makes the agentic story visible
+
+### A note on running modes
+
+The Foundry IQ client and the Azure OpenAI client are both real, configurable, and shipped. The public demo runs with **deterministic fallbacks** (a bundled corpus of real Microsoft Learn / MITRE / CISA sources scored against the same signals; a deterministic risk-scoring engine) so the demo costs nothing to run, never breaks on stage, and produces identical-shape output regardless of which path executes. The UI is explicit about which path is in use via labeled badges:
+
+| Badge | Path |
+|---|---|
+| `Foundry IQ · live` | Real Azure AI Search agentic-retrieval call |
+| `Foundry IQ · bundled` | Deterministic scoring over bundled threat-intel sources |
+| `gpt-4o` (or similar) | Real Azure OpenAI structured-output call |
+| `heuristic-fallback` | Deterministic risk-scoring engine |
+
+To run against live Foundry IQ + Azure OpenAI, set the `FOUNDRY_IQ_*` and `AZURE_OPENAI_*` env vars listed in `.env.local.example`. The request shape (`POST /knowledgebases/{kb}/retrieve?api-version=2026-04-01`) is the documented Azure AI Search agentic-retrieval endpoint that powers Foundry IQ.
+
+The fallbacks are a deliberate **reliability decision** — see the Audit log section in the demo. Every investigation row records `knowledge_source` and `model` so it's auditable which path produced each result.
+
+---
+
 ## Stack
 
 - **Next.js 15** (App Router, TypeScript, React 19)
