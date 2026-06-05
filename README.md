@@ -213,8 +213,8 @@ src/
 fixtures/          # users.json, sign_ins.json
 scripts/           # seed.ts
 supabase/migrations/
-  20260605000000_init.sql
-  20260605120000_foundry_iq.sql
+  20260605162757_init.sql
+  20260605172500_add_citations_and_phase_timings.sql
 ```
 
 ## Deploy to Vercel
